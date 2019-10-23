@@ -1,0 +1,127 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Assignment</title> 
+</head> 
+<body> 
+<script type="text/javascript">
+var thisValue;
+function SetSelectedItemList(thisItem)
+{
+	thisValue = thisItem.value;
+}
+
+
+    var tags = [  
+    "A", 
+    "B", 
+    "C", 
+    "D", 
+    "E" 
+      ]; 
+  
+      /*list of available options*/ 
+     var n= tags.length; //length of datalist tags     
+  
+     function ac(value) { 
+        document.getElementById('val1').innerHTML = ''; 
+         //setting datalist empty at the start of function 
+         //if we skip this step, same name will be repeated 
+           
+         l=value.length; 
+         //input query length 
+     for (var i = 0; i<n; i++) { 
+         if(((tags[i].toLowerCase()).indexOf(value.toLowerCase()))>-1) 
+         { 
+             //comparing if input string is existing in tags[i] string 
+  
+             var node = document.createElement("option"); 
+             var val = document.createTextNode(tags[i]); 
+              node.appendChild(val); 
+  
+               document.getElementById("val1").appendChild(node);
+               //searchItem = document.getElementById("val1").appendChild(node).value;
+                   //creating and appending new elements in data list 
+             } 
+         } 
+     } 
+     
+     
+     
+     
+     
+     function readTextFile()
+     {
+         
+    	 var finalVal="";
+    	 
+    	 var rawFile = new XMLHttpRequest();
+         
+         rawFile.open("GET", "http://localhost:8080/ReadFile/data.txt", false);
+         rawFile.onreadystatechange = function ()
+         {
+             if(rawFile.readyState === 4)
+             {
+                 if(rawFile.status === 200 || rawFile.status == 0)
+                 {
+                     var allText = rawFile.responseText;
+                     var data = allText.split("\n");
+                     for(i=0;i<data.length;i++)	{
+                     	var line = data[i].split(",");
+                     	var v1 = ((thisValue.toString()).trimStart()).trimEnd();
+                     	var v2 = ((line[1].toString()).trimStart()).trimEnd();
+                     	//document.write(v1+" "+v2+"<br>");
+                     	//document.write(v1+" "+v1.match(v2));
+                     	if(v1.match(v2))	{
+                     		//document.write(line[0]+" "+line[1]+"<br>");
+                     		finalVal = finalVal + line[0]+" "+line[1];
+                     	}
+                     	
+                     	
+                     	
+                     }
+                     document.getElementById('outout').innerHTML = finalVal;
+                 }
+             }
+         }
+         rawFile.send(null);
+     }
+     
+     
+     
+   
+</script> 
+  
+<input type="text" list="val1" onkeyup="ac(this.value)" onchange="SetSelectedItemList(this);">
+<input type="button" value="Download" onclick="readTextFile()"><br><br>
+
+<textarea rows="10" cols="10" id="outout">
+
+</textarea>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+<!-- On keyup calls the function everytime a key is released -->
+<datalist id="val1"> 
+  
+<option value="A"></option> 
+<option value="B"></option> 
+<option value="C"></option> 
+<option value="D"></option> 
+<option value="E"></option> 
+  
+<!-- This data list will be edited through javascript     -->
+</datalist> 
+</body> 
+</html> 
